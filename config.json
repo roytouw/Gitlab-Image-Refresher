@@ -1,0 +1,27 @@
+{
+  "config": {
+    "interval": 30
+  },
+  "registries": [
+    {
+      "user": "roytouw",
+      "project": "shopr-client",
+      "apiToken": "xNY5tU1zUCSmUhagmtt8",
+      "images": [
+        {
+          "tag": "staging"
+        }
+      ]
+    },
+    {
+      "user": "roytouw",
+      "project": "shopr-go",
+      "apiToken": "xNY5tU1zUCSmUhagmtt8",
+      "images": [
+        {
+          "tag": "staging"
+        }
+      ]
+    }
+  ]
+}
