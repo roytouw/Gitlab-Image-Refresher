@@ -1,9 +1,11 @@
 import requests
+
 from Exceptions import ProjectNotFoundException, RepositoryNotFoundException, UserNotFoundException
 from caching import Cacher
+from ConfigReader import ConfigReader
 
+config_reader = ConfigReader()
 base_url = "https://gitlab.com/api/v4"
-params = {'private_token': '8TQ5FAb5hEa_hxUpeVq-'}
 cacher = Cacher()
 
 
@@ -17,11 +19,8 @@ def json_fetch(url, header):
     return func
 
 
-fetch = json_fetch(base_url, params)
-
-
 # Try searching user_id in cache, if not found fetch from Gitlab API.
-def get_user_id(user):
+def get_user_id(user, fetch):
     try:
         cached_user_id = cacher.get_user_id_for_name(user)
         if cached_user_id:
@@ -37,7 +36,7 @@ def get_user_id(user):
 
 
 # Try searching project_id in cache, if not found fetch from Gitlab API.
-def get_project_id(user_id, project_name):
+def get_project_id(user_id, project_name, fetch):
     try:
         cached_project_id = cacher.get_project_id_for_name(project_name)
         if cached_project_id:
@@ -57,7 +56,7 @@ def get_project_id(user_id, project_name):
 # Fetch repository_id of repository belonging to project.
 # First looks in cache, if not exists fetch from Gitlab API.
 # Assuming single repository for project.
-def get_repository_id(project_id):
+def get_repository_id(project_id, fetch):
     try:
         cached_repository = cacher.get_repository_id_for_project(project_id)
         if cached_repository:
@@ -72,14 +71,15 @@ def get_repository_id(project_id):
         raise RepositoryNotFoundException
 
 
-def get_image_info(user, project, tag):
+def get_image_info(user, project, tag, api_token):
     try:
+        fetch = json_fetch(base_url, {'private_token': api_token})
         cached_project = cacher.get_project_and_repository_id(project)
         if cached_project:
             return fetch(f'/projects/{cached_project[0]}/registry/repositories/{cached_project[1]}/tags/{tag}')
-        user_id = get_user_id(user)
-        project_id = get_project_id(user_id, project)
-        repository_id = get_repository_id(project_id)
+        user_id = get_user_id(user, fetch)
+        project_id = get_project_id(user_id, project, fetch)
+        repository_id = get_repository_id(project_id, fetch)
         image_info = fetch(f'/projects/{project_id}/registry/repositories/{repository_id}/tags/{tag}')
         return image_info
     except Exception as error:
@@ -88,7 +88,4 @@ def get_image_info(user, project, tag):
 
 if __name__ == "__main__":
     # TODO manner to pass API key to get_image_info into json_fetch closure
-    # get_user_id('roytouw')
-    # get_project_id('4390202', 'shopr-client')
-    # print(get_repository_id('13776728'))
     print(get_image_info('roytouw', 'shopr-client', 'staging'))

@@ -25,7 +25,7 @@ def poll_updates():
         while True:
             for registry in registries:
                 for image in registry['images']:
-                    image_info = get_image_info(registry['user'], registry['project'], image['tag'])
+                    image_info = get_image_info(registry['user'], registry['project'], image['tag'], registry['apiToken'])
                     image_cache = cacher.search_image(image_info['path'])[0]
 
                     if image_cache['revision'] != image_info['revision']:
