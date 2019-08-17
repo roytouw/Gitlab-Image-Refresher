@@ -3,7 +3,7 @@ from Exceptions import ProjectNotFoundException, RepositoryNotFoundException, Us
 from caching import Cacher
 
 base_url = "https://gitlab.com/api/v4"
-params = {'private_token': 'xNY5tU1zUCSmUhagmtt8'}
+params = {'private_token': '8TQ5FAb5hEa_hxUpeVq-'}
 cacher = Cacher()
 
 

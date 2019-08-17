@@ -8,3 +8,11 @@ class ProjectNotFoundException(Exception):
 
 class RepositoryNotFoundException(Exception):
     pass
+
+
+class ErrorConnectingAPIException(Exception):
+    pass
+
+
+class ImageNotFoundException(Exception):
+    pass

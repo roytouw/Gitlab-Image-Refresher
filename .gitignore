@@ -1,3 +1,7 @@
+config.json
+./config.json
+cache.json
+./cache.json
 
 # Created by https://www.gitignore.io/api/python,pycharm,virtualenv
 # Edit at https://www.gitignore.io/?templates=python,pycharm,virtualenv
