@@ -20,7 +20,6 @@ def restart_outdated_containers(location, revision):
         image_path = container.attrs.get('Config').get('Image')
         image_revision = container.attrs.get('Image').split(":")[1]
         if location == image_path:
-            client.containers.run(location, detach=True)
             if revision != image_revision or True:      # Running old version of image.
                 container.stop()
                 container.remove()
