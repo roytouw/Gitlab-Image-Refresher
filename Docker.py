@@ -26,10 +26,15 @@ def restart_outdated_containers(location, revision):
             image_revision = container.attrs.get('Image').split(":")[1]
             if location == image_path:
                 if revision != image_revision or True:      # Running old version of image.
+                    logger.log_line('a')
                     if container.attrs.get('State').get('Running'):
+                        logger.log_line('b')
                         container.stop()
+                    logger.log_line('c')
                     container.remove()
+                    logger.log_line('d')
                     client.containers.run(location, detach=True)
+                    logger.log_line('e')
                     restarted = True
                     logger.log_line(f'Restarted container {location}')
         return restarted
@@ -69,4 +74,7 @@ def restart_services(location):
 
 
 if __name__ == '__main__':
-    print(restart_services('test'))
+    containers = client.containers.list()
+    for container in containers:
+        print(container.attrs)
+    # print(restart_services('test'))
