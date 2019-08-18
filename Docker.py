@@ -63,8 +63,8 @@ def restart_services(location):
             service_image_location = service.attrs.get('Spec').get('Labels').get('com.docker.stack.image')
             if service_image_location == location:
                 service_name = service.attrs.get('Spec').get('Name')
-                cleanup_service(service_name)
                 service.force_update()
+                cleanup_service(service_name)
                 logger.log_line(f'Service {location} updated.')
     except Exception as error:
         logger.log_line(f'Failed restarting service {location}!')
