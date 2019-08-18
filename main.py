@@ -5,11 +5,12 @@ from GitlabAPI import get_image_info
 from caching import Cacher
 from Exceptions import ErrorConnectingAPIException, ImageNotFoundException
 from Docker import refresh_image, restart_outdated_containers, restart_services
-from Logger import logger
+from Logger import Logger
 
 config_reader = ConfigReader()
 cacher = Cacher()
 registries = config_reader.get_registries()
+logger = Logger()
 
 
 def register_images():

@@ -1,8 +1,9 @@
 import docker
 from Exceptions import ImageNotFoundException
-from Logger import logger
+from Logger import Logger
 
 client = docker.from_env()
+logger = Logger()
 
 
 # Pull image from given location.
