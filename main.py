@@ -5,6 +5,7 @@ from GitlabAPI import get_image_info
 from caching import Cacher
 from Exceptions import ErrorConnectingAPIException, ImageNotFoundException
 from Docker import refresh_image, restart_outdated_containers, restart_services
+from Logger import logger
 
 config_reader = ConfigReader()
 cacher = Cacher()
@@ -29,6 +30,7 @@ def poll_updates():
                     image_cache = cacher.search_image(image_info['path'])[0]
 
                     if image_cache['revision'] != image_info['revision']:
+                        logger.log_line(f'Update detected for image {image_info["location"]}')
                         cacher.update_image(image_info['path'], image_info['revision'])
                         refresh_image(image_info['location'])
                         restart_services(image_info['location'])
@@ -37,7 +39,7 @@ def poll_updates():
                         print('No update.')
             time.sleep(config_reader.get_interval())
     except ImageNotFoundException as error:
-        print(error)  # TODO Should log this
+        logger.log_line(error)
 
 
 if __name__ == '__main__':

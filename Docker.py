@@ -1,5 +1,6 @@
 import docker
 from Exceptions import ImageNotFoundException
+from Logger import logger
 
 client = docker.from_env()
 
@@ -8,6 +9,7 @@ client = docker.from_env()
 def refresh_image(location):
     try:
         client.images.pull(location)
+        logger.log_line(f'Pulled image {location}')
     except Exception:
         raise ImageNotFoundException(f'Image not found at {location}!')
 
@@ -25,7 +27,7 @@ def restart_outdated_containers(location, revision):
                 container.remove()
                 client.containers.run(location, detach=True)
                 restarted = True
-                print(f'Restarted container {location}')
+                logger.log_line(f'Restarted container {location}')
     return restarted
 
 
@@ -48,7 +50,7 @@ def restart_services(location):
             service_name = service.attrs.get('Spec').get('Name')
             cleanup_service(service_name)
             service.force_update()
-            print(f'Service {location} updated.')
+            logger.log_line(f'Service {location} updated.')
 
 
 if __name__ == '__main__':
