@@ -36,8 +36,8 @@ def poll_updates():
                             cacher.update_image(image_info['path'], image_info['revision'])
                             refresh_image(image_info['location'])
                             restart_services(image_info['location'])
-                            time.sleep(10)
-                            restart_outdated_containers(image_info['location'], image_info['revision'])
+                            # time.sleep(10)
+                            # restart_outdated_containers(image_info['location'], image_info['revision'])
                         else:
                             print('No update.')
                     except Exception as error:
