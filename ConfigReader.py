@@ -1,6 +1,7 @@
 import json
 
 
+# TODO error handling on not finding config file.
 class ConfigReader:
     def __init__(self):
         with open('config.json', 'r') as config:

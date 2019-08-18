@@ -1,10 +1,7 @@
 # Gitlab-Image-Refresher
+Polls Gitlab image registry for updates for images listed in config.json and updates containers and services
+using these images.
 
-# In active development, not usable yet.
-Refresh Docker Images in running and stopped containers hosted in Gitlab private image registires.
-
-Will use config.json to see what images to poll for updates. Looks at the revision id<sup>1</sup> of listed
-images in the Gitlab Container Registry.
 
 <h2>Usage</h2>
 <li>Configure config.json<sup>2</sup></li>
