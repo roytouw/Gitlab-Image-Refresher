@@ -34,6 +34,7 @@ def restart_outdated_containers(location, revision):
                     logger.log_line(f'Restarted container {location}')
         return restarted
     except Exception as error:
+        logger.log_line(f'Failed restarting container {location}!')
         raise FailedUpdatingContainerException(error)
 
 
@@ -47,6 +48,7 @@ def cleanup_service(service_name):
                 if not container.attrs.get('State').get('Running'):     # If not running.
                     container.remove()
     except Exception as error:
+        logger.log_line(f'Failed cleaning up service {service_name}!')
         raise FailedCleaningServiceException(error)
 
 
@@ -62,6 +64,7 @@ def restart_services(location):
                 service.force_update()
                 logger.log_line(f'Service {location} updated.')
     except Exception as error:
+        logger.log_line(f'Failed restarting service {location}!')
         raise FailedUpdatingServiceException(error)
 
 
