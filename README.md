@@ -2,6 +2,19 @@
 Polls Gitlab image registry for updates for images listed in config.json and updates containers and services
 using these images. Developed for Ubuntu 18.04, other distributions or operated systems not tested.
 
+<h4> Images </h4>
+Images listed in config.json will be replaced by the new version upon detection of the new version.
+
+<h4> Services </h4>
+Services that run outdated images will be cleaned up by removing all stopped containers beloning to
+the service, after which the service will be force-updated to run the newly pulled image.
+
+<h4> Running Containers </h4>
+Running containers belonging to a service will be updated by force-updating the containing service.
+Containers not belonging to any service will be stopped and removed. For each stopped container a new one wil be ran with the updated image.
+
+<h4> Stopped Containers </h4>
+Stopped containers will be treated the same as running containers.
 
 <h2>Usage</h2>
 <li>Configure config.json<sup>2</sup>, make sure config.json is in the same folder as main.py</li>
