@@ -27,17 +27,21 @@ def poll_updates():
         while True:
             for registry in registries:
                 for image in registry['images']:
-                    image_info = get_image_info(registry['user'], registry['project'], image['tag'], registry['apiToken'])
-                    image_cache = cacher.search_image(image_info['path'])[0]
+                    try:
+                        image_info = get_image_info(registry['user'], registry['project'], image['tag'], registry['apiToken'])
+                        image_cache = cacher.search_image(image_info['path'])[0]
 
-                    if image_cache['revision'] != image_info['revision']:
-                        logger.log_line(f'Update detected for image {image_info["location"]}')
-                        cacher.update_image(image_info['path'], image_info['revision'])
-                        refresh_image(image_info['location'])
-                        restart_services(image_info['location'])
-                        restart_outdated_containers(image_info['location'], image_info['revision'])
-                    else:
-                        print('No update.')
+                        if image_cache['revision'] != image_info['revision']:
+                            logger.log_line(f'Update detected for image {image_info["location"]}')
+                            cacher.update_image(image_info['path'], image_info['revision'])
+                            refresh_image(image_info['location'])
+                            restart_services(image_info['location'])
+                            restart_outdated_containers(image_info['location'], image_info['revision'])
+                        else:
+                            print('No update.')
+                    except Exception as error:
+                        logger.log_line(error)
+                        continue
             time.sleep(config_reader.get_interval())
     except ImageNotFoundException as error:
         logger.log_line(error)

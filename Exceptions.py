@@ -16,3 +16,15 @@ class ErrorConnectingAPIException(Exception):
 
 class ImageNotFoundException(Exception):
     pass
+
+
+class FailedUpdatingContainerException(Exception):
+    pass
+
+
+class FailedUpdatingServiceException(Exception):
+    pass
+
+
+class FailedCleaningServiceException(Exception):
+    pass
