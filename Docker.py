@@ -22,19 +22,17 @@ def restart_outdated_containers(location, revision):
         restarted = False
         containers = client.containers.list(all=True)
         for container in containers:
+            service = container.attrs.get('Config').get('Labels').get('com.docker.stack.namespace')
+            if service is not None:  # Container belongs to service.
+                return False
             image_path = container.attrs.get('Config').get('Image')
             image_revision = container.attrs.get('Image').split(":")[1]
             if location == image_path:
-                if revision != image_revision or True:      # Running old version of image.
-                    logger.log_line('a')
+                if revision != image_revision:      # Running old version of image.
                     if container.attrs.get('State').get('Running'):
-                        logger.log_line('b')
                         container.stop()
-                    logger.log_line('c')
                     container.remove()
-                    logger.log_line('d')
                     client.containers.run(location, detach=True)
-                    logger.log_line('e')
                     restarted = True
                     logger.log_line(f'Restarted container {location}')
         return restarted
@@ -73,8 +71,8 @@ def restart_services(location):
         raise FailedUpdatingServiceException(error)
 
 
-if __name__ == '__main__':
-    containers = client.containers.list()
-    for container in containers:
-        print(container.attrs)
-    # print(restart_services('test'))
+# if __name__ == '__main__':
+    # containers = client.containers.list(all=True)
+    # for container in containers:
+    #     print(container.attrs.get('Config').get('Labels').get('com.docker.stack.namespace') == None)
+    # # print(restart_services('test'))
