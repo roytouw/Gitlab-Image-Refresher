@@ -4,7 +4,7 @@ using these images.
 
 
 <h2>Usage</h2>
-<li>Configure config.json<sup>2</sup></li>
+<li>Configure config.json<sup>2</sup>, make sure config.json is in the same folder as main.py</li>
 
 ```json
 {
