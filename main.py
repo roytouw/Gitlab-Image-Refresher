@@ -14,7 +14,7 @@ registries = config_reader.get_registries()
 def register_images():
     for registry in registries:
         for image in registry['images']:
-            image_info = get_image_info(registry['user'], registry['project'], image['tag'])
+            image_info = get_image_info(registry['user'], registry['project'], image['tag'], registry['apiToken'])
             if image_info.get('error'):
                 raise ErrorConnectingAPIException('Could not connect to API!')
             cacher.update_or_insert_image(image_info['path'], image_info['revision'])
@@ -40,5 +40,5 @@ def poll_updates():
 
 
 if __name__ == '__main__':
-    # register_images()
+    register_images()
     poll_updates()
