@@ -23,6 +23,7 @@ def register_images():
             refresh_image(image_info['location'])
             restart_services(image_info['location'])
             restart_outdated_containers(image_info['location'], image_info['revision'])
+            cleanup_exited_containers()
             logger.log_line(f'Registered and updated image {image_info["location"]}')
 
 
