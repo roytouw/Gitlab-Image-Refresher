@@ -1,6 +1,6 @@
 # Gitlab-Image-Refresher
 Polls Gitlab image registry for updates for images listed in config.json and updates containers and services
-using these images. Developed for Ubuntu 18.04, other distributions or operated systems not tested.
+using these images. Developed for Ubuntu 18.04, other distributions or operating systems not tested.
 
 <h4> Images </h4>
 Images listed in config.json will be replaced by the new version upon detection of the new version.
@@ -15,6 +15,10 @@ Containers not belonging to any service will be stopped and removed. For each st
 
 <h4> Stopped Containers </h4>
 Stopped containers will be treated the same as running containers.
+
+<h4> No Running or Stopped Containers Found </h4>
+When no running or stopped containers with the image as listed in the config.json are found, upon detection of a new version of the image
+a single container with this image will be ran. 
 
 <h2>Usage</h2>
 <li>Configure config.json<sup>2</sup>, make sure config.json is in the same folder as main.py</li>
