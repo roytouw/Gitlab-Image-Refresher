@@ -39,9 +39,9 @@ def poll_updates():
                             logger.log_line(f'Update detected for image {image_info["location"]}')
                             cacher.update_image(image_info['path'], image_info['revision'])
                             refresh_image(image_info['location'])
-                            restart_services(image_info['location'])
-                            restarted = restart_outdated_containers(image_info['location'], image_info['revision'])
-                            if not restarted:
+                            restarted_as_service = restart_services(image_info['location'])
+                            restarted_as_container = restart_outdated_containers(image_info['location'], image_info['revision'])
+                            if not restarted_as_service or restarted_as_container:
                                 run_image_once(image_info['location'])
                             print(f'Updated {image_info["location"]}')
                         else:

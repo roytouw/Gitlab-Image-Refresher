@@ -44,7 +44,10 @@ def restart_outdated_containers(location, revision):
 
 # Run image in a container once.
 def run_image_once(location):
-    return False
+    try:
+        client.containers.run(location, detach=True)
+    except Exception as error:
+        raise FailedUpdatingContainerException(error)
 
 
 # Remove stopped containers belonging to service.
@@ -64,14 +67,17 @@ def cleanup_service(service_name):
 # Force update all services with an image of given location.
 def restart_services(location):
     try:
+        restarted = False
         services = client.services.list()
         for service in services:
             service_image_location = service.attrs.get('Spec').get('Labels').get('com.docker.stack.image')
             if service_image_location == location:
                 service_name = service.attrs.get('Spec').get('Name')
                 service.force_update()
+                restarted = True
                 cleanup_service(service_name)
                 logger.log_line(f'Service {location} updated.')
+        return restarted
     except Exception as error:
         logger.log_line(f'Failed restarting service {location}!')
         raise FailedUpdatingServiceException(error)
