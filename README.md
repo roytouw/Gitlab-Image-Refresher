@@ -26,7 +26,9 @@ a single container with this image will be ran.
 ```json
 {
 "config": {
-    "interval": <interval-seconds>
+    "interval": <interval-seconds>,
+    "login": "<gitlab-login>",
+    "password": "<gitlab-password>"
   },
   "registries": [
     {
