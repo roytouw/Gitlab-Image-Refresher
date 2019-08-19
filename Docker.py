@@ -88,6 +88,7 @@ def cleanup_exited_containers():
         if container.attrs.get('State').get('Status') == 'exited':
             try:
                 container.remove()
+                logger.log_line('Cleaned up exited containers.')
             except Exception as error:
                 logger.log_line(f'Failed removing container in cleanup: {error}')
                 continue
