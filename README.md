@@ -1,3 +1,5 @@
+[![](https://images.microbadger.com/badges/version/esv7/gitlab-image-refresher.svg)](https://microbadger.com/images/esv7/gitlab-image-refresher "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/esv7/gitlab-image-refresher.svg)](https://microbadger.com/images/esv7/gitlab-image-refresher "Get your own image badge on microbadger.com")
 # Gitlab-Image-Refresher
 Polls Gitlab image registry for updates for images listed in config.json and updates containers and services
 using these images. Developed for Ubuntu 18.04, other distributions or operating systems not tested.
@@ -21,7 +23,8 @@ When no running or stopped containers with the image as listed in the config.jso
 a single container with this image will be ran. 
 
 <h2>Usage</h2>
-<li>Configure config.json<sup>2</sup>, make sure config.json is in the same folder as main.py</li>
+<li>Configure config.json<sup>2</sup></li>
+Create a config.json file and replace the placeholders with your data.
 
 ```json
 {
@@ -57,10 +60,28 @@ a single container with this image will be ran.
   ]
 }
 ```
-<li>Install Requirements.txt</li>
-<li>Run main.py with sudo rights.<sup>3</sup></li>
+<li>Make docker-compose.yml<sup>4</sup></li>
+Create a docker-compose.yml file and replace the placeholders with your files.
+
+```yml
+version: '3.2'
+services:
+  gitlab-image-refresher:
+    image: gitlab-image:refresher:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - <path-to-config.json>:/app/config.json
+      - <path-to-cache.json>:/app/cache.json
+      - <path-to-log.txt>:/app/cache.json
+```
+
+<li>Deploy Service</li>
+Deploy service e.g. docker stack deploy -c docker-compose.yml refresher
+
+<br /><br />
 
 <sup>1</sup> Hover tag in Gitlab Container Registry for full revision id.<br />
 <sup>2</sup> To generate Gitlab private API token see: https://gitlab.com/profile/personal_access_tokens
 Gitlab Image Refresher requires read_user, read_repository and read_registry rights to work.<br />
-<sup>3</sup>Docker SDK requires sudo rights to interact with Docker daemon.
+<sup>3</sup>Docker SDK requires sudo rights to interact with Docker daemon.<br />
+<sup>4</sup>cache.json and log.txt are optional for perseverance, use touch to create empty file. 
