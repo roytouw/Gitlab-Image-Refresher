@@ -4,7 +4,7 @@ from ConfigReader import ConfigReader
 from GitlabAPI import get_image_info
 from caching import Cacher
 from Exceptions import ErrorConnectingAPIException, ImageNotFoundException
-from Docker import refresh_image, restart_outdated_containers, restart_services, run_image_once
+from Docker import refresh_image, restart_outdated_containers, restart_services, run_image_once, cleanup_exited_containers
 from Logger import Logger
 
 config_reader = ConfigReader()
@@ -41,6 +41,8 @@ def poll_updates():
                             refresh_image(image_info['location'])
                             restarted_as_service = restart_services(image_info['location'])
                             restarted_as_container = restart_outdated_containers(image_info['location'], image_info['revision'])
+                            cleanup_exited_containers()
+
                             if not restarted_as_service or restarted_as_container:
                                 run_image_once(image_info['location'])
                             print(f'Updated {image_info["location"]}')

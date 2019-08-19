@@ -28,3 +28,7 @@ class FailedUpdatingServiceException(Exception):
 
 class FailedCleaningServiceException(Exception):
     pass
+
+
+class FailedRemovingContainerException(Exception):
+    pass

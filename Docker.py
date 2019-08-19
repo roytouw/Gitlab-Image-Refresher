@@ -1,4 +1,5 @@
 import docker
+
 from Exceptions import ImageNotFoundException, FailedUpdatingContainerException, FailedCleaningServiceException, \
     FailedUpdatingServiceException
 from Logger import Logger
@@ -72,10 +73,8 @@ def restart_services(location):
         for service in services:
             service_image_location = service.attrs.get('Spec').get('Labels').get('com.docker.stack.image')
             if service_image_location == location:
-                service_name = service.attrs.get('Spec').get('Name')
                 service.force_update()
                 restarted = True
-                cleanup_service(service_name)
                 logger.log_line(f'Service {location} updated.')
         return restarted
     except Exception as error:
@@ -83,8 +82,19 @@ def restart_services(location):
         raise FailedUpdatingServiceException(error)
 
 
+def cleanup_exited_containers():
+    containers = client.containers.list(all=True)
+    for container in containers:
+        if container.attrs.get('State').get('Status') == 'exited':
+            try:
+                container.remove()
+            except Exception as error:
+                logger.log_line(f'Failed removing container in cleanup: {error}')
+                continue
+
+
 # if __name__ == '__main__':
-    # containers = client.containers.list(all=True)
-    # for container in containers:
-    #     print(container.attrs.get('Config').get('Labels').get('com.docker.stack.namespace') == None)
-    # # print(restart_services('test'))
+#     containers = client.containers.list(all=True)
+#     for container in containers:
+#         print(container.attrs.get('State').get('Status'))
+#     # print(restart_services('test'))
