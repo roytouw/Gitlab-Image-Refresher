@@ -23,7 +23,7 @@ When no running or stopped containers with the image as listed in the config.jso
 a single container with this image will be ran. 
 
 <h2>Usage</h2>
-<li>Configure config.json<sup>2</sup></li>
+<li>Configure config.json<sup>1</sup></li>
 Create a config.json file and replace the placeholders with your data.
 
 ```json
@@ -60,7 +60,7 @@ Create a config.json file and replace the placeholders with your data.
   ]
 }
 ```
-<li>Make docker-compose.yml<sup>4</sup></li>
+<li>Make docker-compose.yml<sup>2</sup></li>
 Create a docker-compose.yml file and replace the placeholders with your files.
 
 ```yml
@@ -80,8 +80,6 @@ Deploy service e.g. docker stack deploy -c docker-compose.yml refresher
 
 <br /><br />
 
-<sup>1</sup> Hover tag in Gitlab Container Registry for full revision id.<br />
-<sup>2</sup> To generate Gitlab private API token see: https://gitlab.com/profile/personal_access_tokens
-Gitlab Image Refresher requires read_user, read_repository and read_registry rights to work.<br />
-<sup>3</sup>Docker SDK requires sudo rights to interact with Docker daemon.<br />
-<sup>4</sup>cache.json and log.txt are optional for perseverance, use touch to create empty file. 
+<sup>1</sup> To generate Gitlab private API token see: https://gitlab.com/profile/personal_access_tokens
+Gitlab Image Refresher requires api rights to work.<br />
+<sup>2</sup>cache.json and log.txt are optional for perseverance, use touch to create empty file. 
