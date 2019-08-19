@@ -20,13 +20,18 @@ class ConfigReader:
     def get_interval(self):
         return self.data['config']['interval']
 
+    def get_gitlab_credentials(self):
+        return self.data['config']['login'], self.data['config']['password']
+
     def get_registries(self):
         return self.data['registries']
 
 
 if __name__ == "__main__":
     configReader = ConfigReader()
-    print(configReader.get_interval())
+    login, password = configReader.get_gitlab_credentials()
+    print(login, password)
+
 
     # print(get_image_info())
 
