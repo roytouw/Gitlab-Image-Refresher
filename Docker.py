@@ -3,8 +3,13 @@ import docker
 from Exceptions import ImageNotFoundException, FailedUpdatingContainerException, FailedCleaningServiceException, \
     FailedUpdatingServiceException
 from Logger import Logger
+from ConfigReader import ConfigReader
 
 client = docker.from_env()
+config_reader = ConfigReader()
+
+login, password = config_reader.get_gitlab_credentials()
+client.login(username=login, password=password, registry='registry.gitlab.com')
 logger = Logger()
 
 
@@ -94,8 +99,8 @@ def cleanup_exited_containers():
                 continue
 
 
-# if __name__ == '__main__':
-#     containers = client.containers.list(all=True)
-#     for container in containers:
-#         print(container.attrs.get('State').get('Status'))
+if __name__ == '__main__':
+    containers = client.containers.list(all=True)
+    for container in containers:
+        print(container.attrs.get('State').get('Status'))
 #     # print(restart_services('test'))
