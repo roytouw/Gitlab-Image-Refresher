@@ -10,6 +10,7 @@ logger = Logger()
 # Pull image from given location.
 def refresh_image(location):
     try:
+        logger.log_line(f'Pulling image {location}, this may take a while.')
         client.images.pull(location)
         logger.log_line(f'Pulled image {location}')
     except Exception:
@@ -24,7 +25,7 @@ def restart_outdated_containers(location, revision):
         for container in containers:
             service = container.attrs.get('Config').get('Labels').get('com.docker.stack.namespace')
             if service is not None:  # Container belongs to service.
-                return False
+                continue
             image_path = container.attrs.get('Config').get('Image')
             image_revision = container.attrs.get('Image').split(":")[1]
             if location == image_path:
@@ -39,6 +40,11 @@ def restart_outdated_containers(location, revision):
     except Exception as error:
         logger.log_line(f'Failed restarting container {location}!')
         raise FailedUpdatingContainerException(error)
+
+
+# Run image in a container once.
+def run_image_once(location):
+    return False
 
 
 # Remove stopped containers belonging to service.
